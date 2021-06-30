@@ -15,7 +15,7 @@ public func configure(_ app: Application) throws {
        tlsConfiguration: .forClient(certificateVerification: .none)
      ), as: .mysql)
      
-//     app.migrations.add(CreateAcronym())
+     app.migrations.add(CreateAcronym())
 
 //     app.logger.logLevel = .debug
      
