@@ -11,10 +11,11 @@ public func configure(_ app: Application) throws {
        hostname: "localhost",
        username: "root",
        password: "shenfu1991",
-       database: "vapor"
+       database: "vapor",
+        tlsConfiguration: .forClient(certificateVerification: .none)
      ), as: .mysql)
      
-     app.migrations.add(CreateAcronym())
+//     app.migrations.add(CreateAcronym())
 
 //     app.logger.logLevel = .debug
      
