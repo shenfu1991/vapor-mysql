@@ -11,8 +11,7 @@ public func configure(_ app: Application) throws {
        hostname: "localhost",
        username: "root",
        password: "shenfu1991",
-       database: "vapor",
-       tlsConfiguration: .forClient(certificateVerification: .none)
+       database: "vapor"
      ), as: .mysql)
      
      app.migrations.add(CreateAcronym())
