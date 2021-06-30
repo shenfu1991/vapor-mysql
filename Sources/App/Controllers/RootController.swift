@@ -13,9 +13,15 @@ class RootController {
     let db =  kApp.db  as! MySQLDatabase
 
     func boot() {
-    debugPrint("boot")
-     query()
-
+        debugPrint("boot")
+        add()
+        add1()
+        DispatchQueue.global().asyncAfter(deadline: .now()+5) {
+            self.update()
+        }
+        DispatchQueue.global().asyncAfter(deadline: .now()+7) {
+            self.query()
+        }
     }
     
     func query() {
@@ -41,6 +47,12 @@ class RootController {
     
     func add() {
         db.query("insert into shenfu VALUES (?,?,?)",["8","陆小凤",99]) { row in
+        } onMetadata: { _ in
+        }
+    }
+    
+    func add1() {
+        db.query("insert into shenfu VALUES (?,?,?)",["9","张无忌",199]) { row in
         } onMetadata: { _ in
         }
     }

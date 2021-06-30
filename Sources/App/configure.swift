@@ -15,15 +15,17 @@ public func configure(_ app: Application) throws {
        tlsConfiguration: .forClient(certificateVerification: .none)
      ), as: .mysql)
      
-     app.migrations.add(CreateAcronym())
+//     app.migrations.add(CreateAcronym())
 
 //     app.logger.logLevel = .debug
      
-     try app.autoMigrate().wait()
+       try app.autoMigrate().wait()
 
-     try routes(app)
+       try routes(app)
     
+    DispatchQueue.global().asyncAfter(deadline: .now()+5) {
         let vc = RootController()
         vc.boot()
-         
+    }
+ 
 }
