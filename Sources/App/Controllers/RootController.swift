@@ -40,19 +40,19 @@ class RootController {
     }
     
     func delete() {
-        db.query("delete from shenfu where score = ?",[99]) { row in
+        db.query("delete from shenfu where name = ?",["陆小凤"]) { row in
         } onMetadata: { _ in
         }
     }
     
     func add() {
-        db.query("insert into shenfu VALUES (?,?,?)",["8","陆小凤",99]) { row in
+        db.query("insert into shenfu VALUES (?,?)",["陆小凤",99]) { row in
         } onMetadata: { _ in
         }
     }
     
     func add1() {
-        db.query("insert into shenfu VALUES (?,?,?)",["9","张无忌",199]) { row in
+        db.query("insert into shenfu VALUES (?,?)",["张无忌",199]) { row in
         } onMetadata: { _ in
         }
     }
