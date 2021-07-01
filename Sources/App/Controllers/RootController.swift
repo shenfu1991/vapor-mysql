@@ -15,12 +15,9 @@ class RootController {
         debugPrint("boot")
         add()
         add1()
-        DispatchQueue.global().asyncAfter(deadline: .now()+5) {
-            self.update()
-        }
-        DispatchQueue.global().asyncAfter(deadline: .now()+7) {
-            self.query()
-        }
+        self.update()
+        self.query()
+        delete()
     }
     
     func query() {
@@ -39,19 +36,19 @@ class RootController {
     }
     
     func delete() {
-        try? mysqlDB.query("delete from shenfu where name = ?",["陆小凤"]) { row in
+        try? mysqlDB.query("delete from shenfu where name = ? and score = ?",["陆小凤",99]) { row in
         } onMetadata: { _ in
         }.wait()
     }
     
     func add() {
-        try? mysqlDB.query("insert into shenfu VALUES (?,?)",["陆小凤",99]) { row in
+        try? mysqlDB.query("insert into shenfu VALUES (?,?)",["成吉思汗",60]) { row in
         } onMetadata: { _ in
         }.wait()
     }
     
     func add1() {
-        try? mysqlDB.query("insert into shenfu VALUES (?,?)",["张无忌",199]) { row in
+        try? mysqlDB.query("insert into shenfu VALUES (?,?)",["王重阳",69]) { row in
         } onMetadata: { _ in
         }.wait()
     }

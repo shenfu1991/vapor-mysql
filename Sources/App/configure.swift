@@ -53,7 +53,5 @@ public func configure(_ app: Application) throws {
     }    
     
     let vc = RootController()
-    vc.boot()
-  
- 
+    vc.boot() 
 }
