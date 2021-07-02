@@ -13,14 +13,21 @@ class RootController {
 
     func boot() {
         debugPrint("boot")
-        add()
-        add1()
-        self.update()
-        self.query()
-        delete()
+        let (mysqlDB,pools) = getMySQL()
+        defer {
+            pools.shutdown()
+        }
+        try? mysqlDB.query("select * from shenfu") { row in
+             let value1 = row.column("name")?.string ?? ""
+             let value2 = row.column("score")?.double ?? 0
+             debugPrint("\(value1),\(value2)")
+         } onMetadata: { _ in
+         }.wait()
+         add1(mysqlDB)
+         query(mysqlDB)
     }
     
-    func query() {
+    func query(_ mysqlDB: MySQLDatabase) {
        try? mysqlDB.query("select * from shenfu") { row in
             let value1 = row.column("name")?.string ?? ""
             let value2 = row.column("score")?.double ?? 0
@@ -28,26 +35,30 @@ class RootController {
         } onMetadata: { _ in
         }.wait()
     }
-    
-    func update() {
-        try? mysqlDB.query("update shenfu set score = ? where name = ?",[90,"张无忌"]) { row in
-        } onMetadata: { _ in
-        }.wait()
-    }
-    
-    func delete() {
-        try? mysqlDB.query("delete from shenfu where name = ? and score = ?",["陆小凤",99]) { row in
-        } onMetadata: { _ in
-        }.wait()
-    }
-    
-    func add() {
-        try? mysqlDB.query("insert into shenfu VALUES (?,?)",["成吉思汗",60]) { row in
-        } onMetadata: { _ in
-        }.wait()
-    }
-    
-    func add1() {
+//
+//    func update(_ mysqlDB: MySQLDatabase) {
+//        try? mysqlDB.query("delete from shenfu") { row in
+//        } onMetadata: { res in
+//            debugPrint(res)
+//        }
+//    }
+//
+//    func delete(_ mysqlDB: MySQLDatabase) {
+//        try? mysqlDB.query("delete from shenfu where name = ? and score = ?",["陆小凤",99]) { row in
+//        } onMetadata: { _ in
+//        }
+//    }
+//
+//    func add(_ mysqlDB: MySQLDatabase) {
+//        try? mysqlDB.query("insert into shenfu VALUES (?,?)",["成吉思汗",60]) { row in
+//        } onMetadata: { res in
+//            debugPrint(res)
+//        }.always({ res in
+//            debugPrint(res)
+//        })
+//    }
+//
+    func add1(_ mysqlDB: MySQLDatabase) {
         try? mysqlDB.query("insert into shenfu VALUES (?,?)",["王重阳",69]) { row in
         } onMetadata: { _ in
         }.wait()

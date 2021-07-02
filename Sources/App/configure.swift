@@ -2,30 +2,16 @@ import Vapor
 import MySQLKit
 
 var kApp: Application!
-var mysqlDB: MySQLDatabase!
 
 public func configure(_ app: Application) throws {
     
     kApp = app
     try? routes(app)
-    let configuration = MySQLConfiguration(
-        hostname: "localhost",
-        port: 3306,
-        username: "root",
-        password: "shenfu1991",
-        database: "vapor",
-        tlsConfiguration: .forClient(certificateVerification: .none)
-    )
-    let eventLoopGroup: EventLoopGroup = app.eventLoopGroup.next()
-//    defer { try? eventLoopGroup.syncShutdownGracefully() }
-
-    let pools = EventLoopGroupConnectionPool(
-        source: MySQLConnectionSource(configuration: configuration),
-        on: eventLoopGroup
-    )
-    defer { pools.shutdown() }
-    let pool = pools.pool(for: eventLoopGroup.next())
-    mysqlDB = pool.database(logger: Logger(label: "meng")) // MySQLDatabase
+    
+    let (mysqlDB,pools) = getMySQL()
+    defer {
+        pools.shutdown()
+    }
     let rows = try mysqlDB.simpleQuery("SELECT @@version;").wait()
     debugPrint(rows)
     
@@ -48,8 +34,21 @@ public func configure(_ app: Application) throws {
             arr.append(value1)
         } onMetadata: { _ in
         }.wait()
-    }    
+    }
     
-    let vc = RootController()
-    vc.boot() 
+   getIp()
+}
+
+let mana = NetwokingManager()
+func getIp() {
+    var url = "http://ip-api.com/json/"
+    url = url.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) ?? ""
+    mana.request(type: .ip, URLString: url , parameters: nil) { res in
+//       debugPrint(res)
+    } complete: { _ in
+        DispatchQueue.global().asyncAfter(deadline: .now()+1, execute: {
+            let vc = RootController()
+            vc.boot()
+        })
+    }
 }
