@@ -1,7 +1,5 @@
 import Vapor
-import Fluent
-import FluentMySQLDriver
-import MySQLNIO
+import MySQLKit
 
 var kApp: Application!
 var mysqlDB: MySQLDatabase!
